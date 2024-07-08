@@ -11,7 +11,7 @@ const port = 3000;
 // Configure CORS to allow requests from frontend
 app.use(cors());
 
-const testNetworkRoot = path.resolve(require('os').homedir(), 'hyperledger-fabric/fabric-samples/test-network');
+const testNetworkRoot = path.resolve(require('os').homedir(), 'fabric-samples/test-network');
 
 const gateway = new Gateway();
 let wallet;

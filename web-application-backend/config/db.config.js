@@ -1,7 +1,7 @@
 module.exports = {
   HOST: "localhost",
-  USER: "ciel",
-  PASSWORD: "",
+  USER: "jv",
+  PASSWORD: "1234",
   DB: "aquatrust", // create aquatrust db on your local
   dialect: "postgres",
   pool: {

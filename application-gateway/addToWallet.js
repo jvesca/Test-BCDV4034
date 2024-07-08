@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const { Wallets } = require('fabric-network');
 
-const testNetworkRoot = path.resolve(require('os').homedir(), 'hyperledger-fabric/fabric-samples/test-network');
+const testNetworkRoot = path.resolve(require('os').homedir(), 'fabric-samples/test-network');
 
 async function main() {
 
