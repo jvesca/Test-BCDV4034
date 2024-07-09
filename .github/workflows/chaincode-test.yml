@@ -23,7 +23,7 @@ jobs:
 
     - name: Install dependencies
       working-directory: ./chaincode
-      run: npm ci
+      run: npm install
 
     - name: Verify Node.js setup
       working-directory: ./chaincode
