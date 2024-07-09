@@ -1,0 +1,34 @@
+name:  CI
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'chaincode/**'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'chaincode/**'
+
+jobs:
+  verify-chaincode:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+
+    - name: Install dependencies
+      working-directory: ./chaincode
+      run: npm ci
+
+    - name: Verify Node.js setup
+      working-directory: ./chaincode
+      run: node -e "console.log('Chaincode setup verified')"
+
+    - name: Check for syntax errors
+      working-directory: ./chaincode
+      run: node --check index.js
