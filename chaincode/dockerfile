@@ -1,0 +1,11 @@
+FROM hyperledger/fabric-nodeenv:2.2
+# Set working directory
+WORKDIR /root/fabric-samples/aquatrust-chain/chaincode
+# Copy package.json 
+COPY package*.json ./
+# Install any additional dependencies
+RUN npm install
+# Copy chaincode files
+COPY . .
+# The command to run when the container starts
+CMD ["node", "index.js"]
