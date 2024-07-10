@@ -33,7 +33,7 @@ jobs:
       working-directory: ./chaincode
       run: | 
         node --check lib/waterDonation.js
-        node --check collections_config.json
+        npm run lint:json
 
     - name: Run unit tests
       working-directory: ./chaincode
