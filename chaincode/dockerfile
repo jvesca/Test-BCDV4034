@@ -10,4 +10,3 @@ COPY . .
 # The command to run when the container starts
 CMD ["node", "index.js"]
 # Added line for testing workflow
-# Extra line

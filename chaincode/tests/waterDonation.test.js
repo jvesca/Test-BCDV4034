@@ -1,4 +1,4 @@
-const WaterDonation = require('../waterDonation');
+const WaterDonation = require('../lib/waterDonation');
 
 describe('WaterDonation', () => {
     it('should have a function named donateWater', () => {
