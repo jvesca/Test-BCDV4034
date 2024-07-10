@@ -5,7 +5,7 @@ module.exports = {
     },
     extends: [
         'eslint:recommended',
-        'plugin:node/recommended',
+        'plugin:node/recommended-module',
     ],
     parserOptions: {
         ecmaVersion: 12,
@@ -14,4 +14,7 @@ module.exports = {
         'no-console': 'off',
         'node/no-unpublished-require': 'off',
     },
+    plugins: [
+        'node',
+    ],
 };
