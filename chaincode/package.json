@@ -4,16 +4,22 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-        "start": "fabric-chaincode-node start"
+    "start": "fabric-chaincode-node start",
+    "test": "jest",
+    "lint": "eslint ."
   },
   "author": "Ciel Recuerdo",
   "license": "ISC",
   "engines": {
-        "node": ">=12",
-        "npm": ">=5"
-    },
-    "dependencies": {
-        "fabric-contract-api": "^2.2.0",
-        "fabric-shim": "^2.2.0"
-    }
+    "node": ">=12",
+    "npm": ">=5"
+  },
+  "dependencies": {
+    "fabric-contract-api": "^2.2.0",
+    "fabric-shim": "^2.2.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.32.0",
+    "jest": "^27.5.1"
+  }
 }
