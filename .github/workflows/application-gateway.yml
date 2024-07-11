@@ -19,10 +19,17 @@ jobs:
         with:
           node-version: '14'
 
-      - name: Set Fabric environment variables
+      - name: Set up Fabric
         run: |
+          curl -sSL https://bit.ly/2ysbOFE | bash -s -- 2.2.0 1.4.9
           echo "${{ github.workspace }}/fabric-samples/bin" >> $GITHUB_PATH
           echo "FABRIC_CFG_PATH=${{ github.workspace }}/fabric-samples/config" >> $GITHUB_ENV
+
+      - name: Start Fabric network
+        run: |
+          cd fabric-samples/test-network
+          ./network.sh up createChannel -ca -c mychannel -s couchdb
+          ./network.sh deployCC -ccn water_donation -ccv 1.0 -ccp ../../chaincode -ccl javascript
 
       - name: Install dependencies
         working-directory: ./application-gateway
@@ -30,10 +37,13 @@ jobs:
 
       - name: Run addToWallet.js
         working-directory: ./application-gateway
-        run: node addToWallet.js
+        run: |
+          pwd
+          ls -R ../fabric-samples/test-network/organizations
+          node addToWallet.js
 
-      # Add additional steps for testing the gateway if needed
-
-      # - name: Test the gateway
-      #   working-directory: ./application-gateway
-      #   run: node submitDonation
+      - name: Clean up Fabric network
+        if: always()
+        run: |
+          cd fabric-samples/test-network
+          ./network.sh down
