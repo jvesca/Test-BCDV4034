@@ -28,12 +28,17 @@ jobs:
         working-directory: ./application-gateway
         run: npm install
 
+      - name: Verify Fabric network status
+        run: |
+          docker ps
+          docker network ls
+
+      - name: Check organizations folder structure
+        run: ls -R ${{ github.workspace }}/fabric-samples/test-network/organizations
+
       - name: Run addToWallet.js
         working-directory: ./application-gateway
-        run: |
-          pwd
-          ls -R ../fabric-samples/test-network/organizations
-          node addToWallet.js
+        run: node addToWallet.js
 
       # Add additional steps for testing the gateway if needed
 
