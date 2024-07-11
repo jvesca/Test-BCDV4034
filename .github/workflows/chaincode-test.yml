@@ -55,6 +55,13 @@ jobs:
         # Create a test network
         cd ../fabric-samples/test-network
         ./network.sh up createChannel -ca -c mychannel -s couchdb
+
+        #Add Org3 to test network
+        cd ../test-network/addOrg3
+        ./addOrg3.sh up
+
+        # Back to test network
+        cd ../test-network
         
         # Deploy the chaincode
         ./network.sh deployCC -ccn water_donation -ccv 1.0 -ccp ../../chaincode -ccl javascript
