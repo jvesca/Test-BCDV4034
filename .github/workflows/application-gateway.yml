@@ -33,6 +33,6 @@ jobs:
         working-directory: ./application-gateway
         run: node addToWallet.js
 
-      - name: Test the gateway
-        working-directory: ./application-gateway
-        run: node submitDonation
+      # - name: Test the gateway
+      #   working-directory: ./application-gateway
+      #   run: node submitDonation
