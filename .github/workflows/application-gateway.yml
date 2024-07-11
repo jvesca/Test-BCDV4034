@@ -31,7 +31,7 @@ jobs:
 
       - name: Run addToWallet.js
         working-directory: ./application-gateway
-        run:
+        run: |
           echo "Current Directory: $(pwd)" 
           node addToWallet.js
 
