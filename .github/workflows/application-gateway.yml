@@ -1,22 +1,16 @@
 name: Application Gateway Setup and Test
 
 on:
-  push:
-    branches: [ main ]
-    paths:
-      - 'application-gateway/**'
-  pull_request:
-    branches: [ main ]
-    paths:
-      - 'application-gateway/**'
   workflow_run:
-    workflows: ["CI"]
+    workflows: ["Chaincode CI"]
     types:
       - completed
+    branches: [main]
 
 jobs:
   setup-and-test-gateway:
     runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
       - uses: actions/checkout@v2
 
@@ -25,10 +19,10 @@ jobs:
         with:
           node-version: '14'
 
-      - name: Set up Fabric
+      - name: Set Fabric environment variables
         run: |
-          export PATH=$PATH:$PWD/fabric-samples/bin
-          export FABRIC_CFG_PATH=$PWD/fabric-samples/config
+          echo "${{ github.workspace }}/fabric-samples/bin" >> $GITHUB_PATH
+          echo "FABRIC_CFG_PATH=${{ github.workspace }}/fabric-samples/config" >> $GITHUB_ENV
 
       - name: Install dependencies
         working-directory: ./application-gateway
@@ -36,12 +30,9 @@ jobs:
 
       - name: Run addToWallet.js
         working-directory: ./application-gateway
-        run: |
-          cd ../application-gateway
-          node addToWallet.js
+        run: node addToWallet.js
 
       # Add additional steps for testing the gateway if needed
-
 
       # - name: Test the gateway
       #   working-directory: ./application-gateway
