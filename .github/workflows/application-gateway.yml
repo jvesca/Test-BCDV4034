@@ -25,13 +25,23 @@ jobs:
         with:
           node-version: '14'
 
+      - name: Set up Fabric
+        run: |
+          export PATH=$PATH:$PWD/fabric-samples/bin
+          export FABRIC_CFG_PATH=$PWD/fabric-samples/config
+
       - name: Install dependencies
         working-directory: ./application-gateway
         run: npm install
 
       - name: Run addToWallet.js
         working-directory: ./application-gateway
-        run: node addToWallet.js
+        run: |
+          cd ../fabric-samples/application-gateway
+          node addToWallet.js
+
+      # Add additional steps for testing the gateway if needed
+
 
       # - name: Test the gateway
       #   working-directory: ./application-gateway
