@@ -24,14 +24,16 @@ jobs:
         run: |
           echo "${{ github.workspace }}/fabric-samples/bin" >> $GITHUB_PATH
           echo "FABRIC_CFG_PATH=${{ github.workspace }}/fabric-samples/config" >> $GITHUB_ENV
-          
+
       - name: Install dependencies
         working-directory: ./application-gateway
         run: npm install
 
       - name: Run addToWallet.js
         working-directory: ./application-gateway
-        run: node addToWallet.js
+        run:
+          echo "Current Directory: $(pwd)" 
+          node addToWallet.js
 
       # Add additional steps for testing the gateway if needed
 
