@@ -67,4 +67,4 @@ jobs:
         ./network.sh deployCC -ccn water_donation -ccv 1.0 -ccp ../../chaincode -ccl javascript
 
         # Clean up
-        ./network.sh down
+        # ./network.sh down
