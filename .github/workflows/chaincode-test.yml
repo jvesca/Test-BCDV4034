@@ -54,8 +54,8 @@ jobs:
       run: |
         # Create a test network
         cd ../fabric-samples/test-network
-        ./network.sh up createChannel -c mychannel -ca
-
+        ./network.sh up createChannel -ca -c mychannel -s couchdb
+        
         # Deploy the chaincode
         ./network.sh deployCC -ccn water_donation -ccv 1.0 -ccp ../../chaincode -ccl javascript
 
