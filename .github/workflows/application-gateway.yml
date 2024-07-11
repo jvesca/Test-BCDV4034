@@ -37,7 +37,6 @@ jobs:
       - name: Run addToWallet.js
         working-directory: ./application-gateway
         run: |
-          cd ../fabric-samples/application-gateway
           node addToWallet.js
 
       # Add additional steps for testing the gateway if needed
