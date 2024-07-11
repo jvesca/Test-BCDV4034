@@ -61,7 +61,7 @@ jobs:
         ./addOrg3.sh up
 
         # Back to test network
-        cd ../test-network
+        cd ..
         
         # Deploy the chaincode
         ./network.sh deployCC -ccn water_donation -ccv 1.0 -ccp ../../chaincode -ccl javascript
