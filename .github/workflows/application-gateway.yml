@@ -29,13 +29,6 @@ jobs:
         working-directory: ./application-gateway
         run: npm install
 
-      - name: Setting test network up
-        working-directory: ./application-gateway
-        run: |
-          # Bring test network up
-          cd ../fabric-samples/test-network
-          ./network.sh up createChannel -ca -c mychannel -s couchdb
-
       - name: Run addToWallet.js
         working-directory: ./application-gateway
         run: |
