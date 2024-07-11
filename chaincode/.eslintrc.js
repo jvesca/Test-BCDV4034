@@ -15,6 +15,8 @@ module.exports = {
     rules: {
         'no-console': 'off', // Optional: Allows console usage
         'node/no-unpublished-require': 'off', // Optional: Allows require statements for non-published modules
+        // 'no-unused-vars': ['error', { 'varsIgnorePattern': 'allocationObjType'}], // Ignore specific unused variable
+
     },
     overrides: [
         {

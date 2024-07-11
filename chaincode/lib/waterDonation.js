@@ -4,7 +4,7 @@ const { Contract } = require('fabric-contract-api');
 const crypto = require('crypto');
 
 const donationObjType = 'Donation';
-const allocationObjType = 'SpendAllocation';
+// const allocationObjType = 'SpendAllocation'; //eslint-disable-line no-used-vars
 
 const DonationStatus = Object.freeze({Pending: 1, Completed: 2, Cancelled: 3});
 
