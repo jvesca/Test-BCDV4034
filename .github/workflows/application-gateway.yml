@@ -1,16 +1,16 @@
 name: Application Gateway Setup and Test
 
 on:
-  workflow_run:
-    workflows: ["CI"]
-    types:
-      - completed
-    branches: [main]
+  push:
+    paths:
+      - 'application-gateway/**'
+  pull_request:
+    paths:
+      - 'application-gateway/**'
 
 jobs:
   setup-and-test-gateway:
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
       - uses: actions/checkout@v2
 
@@ -27,7 +27,7 @@ jobs:
       - name: List fabric-samples directory
         run: |
           echo "Listing fabric-samples directory:"
-          ls -R ${{ github.workspace }}/fabric-samples/test-network/organizations
+          ls -R ${{ github.workspace }}/fabric-samples/test-network/organizations || true
 
       - name: Install dependencies
         working-directory: ./application-gateway
