@@ -61,8 +61,8 @@ jobs:
           --header 'identitylabel: User1@org1.example.com' \
           --header 'Content-Type: application/json' \
           --data '{
-              "functionName": "createDonation",
-              "args": ["DON001", "Org1", "100", "Water project"]
+          "functionName": "createDonation",
+          "args": ["don3", "10ABC", "888", 88000]
           }'
           echo "\nListing all Docker containers:"
           docker ps -a
