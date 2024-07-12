@@ -49,8 +49,8 @@ jobs:
           echo "Current Directory: $(pwd)"
           node addToWallet.js
 
-      # Add additional steps for testing the gateway if needed
-
-      # - name: Test the gateway
-      #   working-directory: ./application-gateway
-      #   run: node submitDonation
+      - name: Test the gateway
+        working-directory: ./application-gateway
+        run: |
+          echo "Current Directory: $(pwd)"          
+          node submitDonation.js

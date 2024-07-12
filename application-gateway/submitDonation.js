@@ -11,8 +11,9 @@ const port = 3000;
 // Configure CORS to allow requests from frontend
 app.use(cors());
 
-const testNetworkRoot = path.resolve(require('os').homedir(), 'fabric-samples/test-network');
-
+const testNetworkRoot = process.env.GITHUB_WORKSPACE 
+    ? path.resolve(process.env.GITHUB_WORKSPACE, 'fabric-samples/test-network')
+    : path.resolve(require('os').homedir(), 'fabric-samples/test-network');
 const gateway = new Gateway();
 let wallet;
 
