@@ -64,8 +64,17 @@ jobs:
               "functionName": "createDonation",
               "args": ["don3", "10ABC", "888", "88000"]
           }'
-          echo "\nChecking chaincode logs:"
-          docker logs $(docker ps -q --filter name=water_donation)
+          echo "\nListing all Docker containers:"
+          docker ps -a
+          echo "\nChecking peer logs:"
+          docker logs peer0.org1.example.com
+          echo "\nChecking chaincode logs (if container exists):"
+          CHAINCODE_CONTAINER=$(docker ps -q --filter name=dev-peer0.org1.example.com-water_donation)
+          if [ ! -z "$CHAINCODE_CONTAINER" ]; then
+            docker logs $CHAINCODE_CONTAINER
+          else
+            echo "Chaincode container not found"
+          fi
 
       - name: Install test dependencies
         working-directory: ./application-gateway
