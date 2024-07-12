@@ -64,8 +64,7 @@ jobs:
         cd ..
         
         # Deploy the chaincode
-        ./network.sh deployCC -ccn water_donation -ccv 1.0 -ccp ../aquatrust-chain/chaincode -ccl javascript -cccg ../aquatrust-chain/chaincode/collections_config.json -ccep "OR('Org1MSP.member','Org2MSP.member','Org3MSP.member')"
-
+        ./network.sh deployCC -ccn water_donation -ccv 1.0 -ccp ../../chaincode -ccl javascript
 
         # Export ENV Variables for Org3
         export CORE_PEER_TLS_ENABLED=true 
