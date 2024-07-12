@@ -29,11 +29,15 @@ jobs:
         working-directory: ./fabric-samples/test-network
         run: |
           ./network.sh up createChannel -ca -c mychannel -s couchdb
-          ./network.sh deployCC -ccn water_donation -ccv 1.0 -ccp ../../chaincode -ccl javascript -cccg ../../chaincode/collections_config.json -ccep "OR('Org1MSP.member','Org2MSP.member','Org3MSP.member')"
 
       - name: Add Org3 to network
         working-directory: ./fabric-samples/test-network/addOrg3
         run: ./addOrg3.sh up
+
+      - name: Deploy chaincode
+        working-directory: ./fabric-samples/test-network
+        run: |
+          ./network.sh deployCC -ccn water_donation -ccv 1.0 -ccp ../../chaincode -ccl javascript -cccg ../../chaincode/collections_config.json -ccep "OR('Org1MSP.member','Org2MSP.member','Org3MSP.member')"
 
       - name: Install dependencies
         working-directory: ./application-gateway
