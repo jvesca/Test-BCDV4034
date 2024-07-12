@@ -58,11 +58,11 @@ jobs:
           sleep 10
           echo "Testing with Org3 (should fail due to lack of permissions):"
           curl --location 'http://localhost:3000/api/send-donation' \
-          --header 'identitylabel: User1@org3.example.com' \
+          --header 'identitylabel: User1@org1.example.com' \
           --header 'Content-Type: application/json' \
           --data '{
-              "functionName": "createDonation",
-              "args": ["don3", "10ABC", "888", "88000"]
+          "functionName": "createDonation",
+          "args": ["don3", "10ABC", "888", 88000]
           }'
           echo "\nListing all Docker containers:"
           docker ps -a
