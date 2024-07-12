@@ -4,23 +4,12 @@ const fs = require('fs');
 const path = require('path');
 const { Wallets } = require('fabric-network');
 
-const testNetworkRoot = process.env.GITHUB_WORKSPACE
-    ? path.join(process.env.GITHUB_WORKSPACE, 'fabric-samples/test-network')
-    : path.resolve(require('os').homedir(), 'fabric-samples/test-network');
-
-console.log('testNetworkRoot:', testNetworkRoot);
-
-if (!fs.existsSync(testNetworkRoot)) {
-    console.error('Directory does not exist: ${testNetworkRoot}');
-    process.exit(1);
-}
+const testNetworkRoot = path.resolve(require('os').homedir(), 'fabric-samples/test-network');
 
 async function main() {
 
     try {
         const wallet = await Wallets.newFileSystemWallet('./wallet');
-
-        console.log('Wallet Path:', path.resolve('./wallet'));
         
         const predefinedOrgs = [
             {
@@ -40,7 +29,6 @@ async function main() {
 
         for (const org of predefinedOrgs) {
             const credPath = path.join(testNetworkRoot, '/organizations/peerOrganizations/', org.name, '/users');
-            console.log('Checking credPath:', credPath);
             
             for (const user of org.users) {
                 const mspFolderPath = path.join(credPath, `${user}@${org.name}`, '/msp');
