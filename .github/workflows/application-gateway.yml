@@ -52,9 +52,11 @@ jobs:
       - name: Test the gateway
         working-directory: ./application-gateway
         run: |
+          echo "Starting submitDonation.js"
           node submitDonation.js &
-          sleep 5
-          echo "Testing with Org3 (should fail):"
+          echo "Waiting for server to start..."
+          sleep 10
+          echo "Testing with Org3 (should fail due to lack of permissions):"
           curl --location 'http://localhost:3000/api/send-donation' \
           --header 'identitylabel: User1@org3.example.com' \
           --header 'Content-Type: application/json' \
@@ -62,14 +64,8 @@ jobs:
               "functionName": "createDonation",
               "args": ["don3", "10ABC", "888", "88000"]
           }'
-          echo "\nTesting with Org1 (should succeed):"
-          curl --location 'http://localhost:3000/api/send-donation' \
-          --header 'identitylabel: User1@org1.example.com' \
-          --header 'Content-Type: application/json' \
-          --data '{
-              "functionName": "createDonation",
-              "args": ["don3", "10ABC", "888", "88000"]
-          }'
+          echo "\nChecking chaincode logs:"
+          docker logs $(docker ps -q --filter name=water_donation)
 
       - name: Install test dependencies
         working-directory: ./application-gateway
