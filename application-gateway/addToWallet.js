@@ -5,7 +5,7 @@ const path = require('path');
 const { Wallets } = require('fabric-network');
 
 const testNetworkRoot = process.env.GITHUB_WORKSPACE
-    ? path.join(process.env.GITHUB_WORKSPACE, 'fabric-samples', 'test-network')
+    ? path.join(process.env.GITHUB_WORKSPACE, 'fabric-samples/test-network')
     : path.resolve(require('os').homedir(), 'fabric-samples/test-network');
 
 console.log('testNetworkRoot:', testNetworkRoot);
