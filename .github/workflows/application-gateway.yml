@@ -54,7 +54,22 @@ jobs:
         run: |
           node submitDonation.js &
           sleep 5
-          curl http://localhost:3000/api/query-donation/DON001
+          echo "Testing with Org3 (should fail):"
+          curl --location 'http://localhost:3000/api/send-donation' \
+          --header 'identitylabel: User1@org3.example.com' \
+          --header 'Content-Type: application/json' \
+          --data '{
+              "functionName": "createDonation",
+              "args": ["don3", "10ABC", "888", "88000"]
+          }'
+          echo "\nTesting with Org1 (should succeed):"
+          curl --location 'http://localhost:3000/api/send-donation' \
+          --header 'identitylabel: User1@org1.example.com' \
+          --header 'Content-Type: application/json' \
+          --data '{
+              "functionName": "createDonation",
+              "args": ["don3", "10ABC", "888", "88000"]
+          }'
 
       - name: Install test dependencies
         working-directory: ./application-gateway
