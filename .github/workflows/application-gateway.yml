@@ -19,15 +19,31 @@ jobs:
         with:
           node-version: '14'
 
-      - name: Set Fabric environment variables
+      - name: List workspace contents
         run: |
+          echo "Listing workspace contents:"
+          ls -R ${{ github.workspace }}
+
+      - name: Check for fabric-samples
+        run: |
+          echo "Checking for fabric-samples:"
+          find ${{ github.workspace }} -name fabric-samples
+
+      - name: Set up Fabric
+        run: |
+          curl -sSL https://bit.ly/2ysbOFE | bash -s -- 2.2.0 1.4.9
           echo "${{ github.workspace }}/fabric-samples/bin" >> $GITHUB_PATH
           echo "FABRIC_CFG_PATH=${{ github.workspace }}/fabric-samples/config" >> $GITHUB_ENV
+
+      - name: Check Fabric setup
+        run: |
+          echo "Checking Fabric setup:"
+          ls -R ${{ github.workspace }}/fabric-samples
 
       - name: List fabric-samples directory
         run: |
           echo "Listing fabric-samples directory:"
-          ls -R ${{ github.workspace }}/fabric-samples/test-network/organizations
+          ls -R ${{ github.workspace }}/fabric-samples/test-network/organizations || true
 
       - name: Install dependencies
         working-directory: ./application-gateway
