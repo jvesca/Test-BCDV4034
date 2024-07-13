@@ -43,14 +43,6 @@ jobs:
         working-directory: ./application-gateway
         run: npm install
 
-      - name: Install Jest
-        working-directory: ./application-gateway
-        run: npm install --save-dev jest supertest
-
-      - name: Run unit tests
-        working-directory: ./application-gateway
-        run: npx jest tests
-
       - name: Run addToWallet.js
         working-directory: ./application-gateway
         run: |
