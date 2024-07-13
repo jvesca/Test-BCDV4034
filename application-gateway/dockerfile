@@ -25,5 +25,4 @@ EXPOSE 3000
 # Command to run the application gateway
 CMD ["node", "app.js"]
 
-# Add Line
 

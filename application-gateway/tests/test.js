@@ -7,7 +7,7 @@ let server;
 
 before(async function() {
     this.timeout(10000);
-    server = app.listen(3000, () => console.log('Test server running on port 3000'));
+    server = app.listen(3001, () => console.log('Test server running on port 3001'));
     await new Promise(resolve => setTimeout(resolve, 2000));
 });
 
