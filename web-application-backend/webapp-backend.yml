@@ -1,0 +1,53 @@
+name: Web Application Backend CI
+
+on:
+  workflow_run:
+    workflows: ["Application Gateway Setup and Test"]
+    types:
+      - completed
+    branches: [main]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+
+    - name: Install dependencies
+      working-directory: ./web-application-backend
+      run: npm install
+
+    - name: Run unit tests
+      working-directory: ./web-application-backend
+      run: npm test
+
+    - name: Start backend server
+      working-directory: ./web-application-backend
+      run: |
+        node app.js &
+        echo $! > ./pid.file
+        sleep 10
+
+    - name: Test GET donors
+      run: |
+        response=$(curl -s -o response.txt -w "%{http_code}" 'http://localhost:3001/registration/donors?page=1&size=1')
+        if [ $response = "200" ]; then
+          echo "GET donors successful"
+          cat response.txt
+        else
+          echo "GET donors failed with status $response"
+          cat response.txt
+          exit 1
+        fi
+
+    - name: Stop backend server
+      if: always()
+      run: |
+        kill $(cat ./web-application-backend/pid.file)

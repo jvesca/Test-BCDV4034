@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "keywords": [],
   "author": "Ciel Recuerdo | Felipe",
@@ -18,6 +18,8 @@
     "sequelize": "^6.37.1"
   },
   "devDependencies": {
+    "jest": "^27.5.1",
+    "supertest": "^6.1.3",
     "@faker-js/faker": "^8.4.1"
   }
 }
