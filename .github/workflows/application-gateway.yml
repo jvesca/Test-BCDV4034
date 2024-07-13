@@ -62,6 +62,7 @@ jobs:
         run: |
           echo "Current Directory: $(pwd)"          
           echo "Starting submitDonation.js"
-          node submitDonation.js
+          timeout 10s node submitDonation.js || true
+          echo "Server stopped after 10 seconds"
 
    
