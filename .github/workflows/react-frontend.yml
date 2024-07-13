@@ -1,0 +1,33 @@
+name: React Frontend CI
+
+on:
+  workflow_run:
+    workflows: ["Web Application Backend CI"]
+    types:
+      - completed
+    branches: [main]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Use Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'  
+
+    - name: Install dependencies
+      working-directory: ./react-frontend/aquatrustchain
+      run: npm install
+
+    - name: Run unit tests
+      working-directory: ./react-frontend/aquatrustchain
+      run: npm test -- --watchAll=false
+
+    - name: Build
+      working-directory: ./react-frontend/aquatrustchain
+      run: npm run build
