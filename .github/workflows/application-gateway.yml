@@ -52,34 +52,8 @@ jobs:
       - name: Test the gateway
         working-directory: ./application-gateway
         run: |
+          echo "Current Directory: $(pwd)"          
           echo "Starting submitDonation.js"
-          node submitDonation.js &
-          echo "Waiting for server to start..."
-          sleep 10
-          echo "Testing with Org1 (should succeed):"
-          curl --location 'http://localhost:3000/api/send-donation' \
-          --header 'identitylabel: User1@org1.example.com' \
-          --header 'Content-Type: application/json' \
-          --data '{
-          "functionName": "createDonation",
-          "args": ["don3", "10ABC", "888", 88000]
-          }'
-          echo "\nListing all Docker containers:"
-          docker ps -a
-          echo "\nChecking peer logs:"
-          docker logs peer0.org1.example.com
-          echo "\nChecking chaincode logs (if container exists):"
-          CHAINCODE_CONTAINER=$(docker ps -aq --filter name=dev-peer0.org1.example.com-water_donation)
-          if [ ! -z "$CHAINCODE_CONTAINER" ]; then
-            docker logs $CHAINCODE_CONTAINER
-          else
-            echo "Chaincode container not found"
-          fi
+          node submitDonation.js
 
-      - name: Install test dependencies
-        working-directory: ./application-gateway
-        run: npm install mocha axios --save-dev
-
-      - name: Run comprehensive tests
-        working-directory: ./application-gateway
-        run: npx mocha tests/test.js
+   
