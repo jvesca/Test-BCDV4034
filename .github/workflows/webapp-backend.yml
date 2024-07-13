@@ -50,4 +50,8 @@ jobs:
     - name: Stop backend server
       if: always()
       run: |
-        kill $(cat ./web-application-backend/pid.file)
+        if [ -f ./web-application-backend/pid.file ]; then
+          kill $(cat ./web-application-backend/pid.file)
+        else
+          echo "PID file not found, server may not have started"
+        fi

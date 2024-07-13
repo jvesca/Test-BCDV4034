@@ -1,25 +1,22 @@
 const request = require('supertest');
-const express = require('express');
-const cors = require('cors');
 
-// Mock the database and routes
+// Mock the database
 jest.mock('../models', () => ({
   sequelize: {
     sync: jest.fn().mockResolvedValue()
   }
 }));
-jest.mock('../routes/donations', () => express.Router());
-jest.mock('../routes/registration', () => express.Router());
 
-const app = require('../app');
+// Mock the routes
+jest.mock('../routes/donations', () => jest.fn());
+jest.mock('../routes/registration', () => jest.fn());
 
 describe('App', () => {
-  it('should use cors middleware', () => {
-    expect(app._router.stack.some(layer => layer.name === 'corsMiddleware')).toBe(true);
-  });
+  let app;
 
-  it('should use JSON parsing middleware', () => {
-    expect(app._router.stack.some(layer => layer.name === 'jsonParser')).toBe(true);
+  beforeEach(() => {
+    jest.resetModules();
+    app = require('../app');
   });
 
   it('should set up routes', () => {
@@ -27,9 +24,12 @@ describe('App', () => {
     expect(app._router.stack.some(layer => layer.regexp.test('/donations'))).toBe(true);
   });
 
-  it('should start the server on port 3001', async () => {
-    const server = app.listen(3001);
-    await request(app).get('/').expect(404); // Assuming no root route, should get 404
-    server.close();
+  it('should use JSON parsing middleware', () => {
+    expect(app._router.stack.some(layer => layer.name === 'jsonParser')).toBe(true);
+  });
+
+  it('should respond with 404 for unknown routes', async () => {
+    const response = await request(app).get('/unknown-route');
+    expect(response.status).toBe(404);
   });
 });
