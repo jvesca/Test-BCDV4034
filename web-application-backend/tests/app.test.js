@@ -1,12 +1,5 @@
 const request = require('supertest');
 
-// Mock the database
-jest.mock('../models', () => ({
-  sequelize: {
-    sync: jest.fn().mockResolvedValue()
-  }
-}));
-
 // Mock the routes
 jest.mock('../routes/donations', () => jest.fn());
 jest.mock('../routes/registration', () => jest.fn());
@@ -16,7 +9,7 @@ describe('App', () => {
 
   beforeEach(() => {
     jest.resetModules();
-    app = require('../app');
+    app = require('../app-test');
   });
 
   it('should set up routes', () => {
