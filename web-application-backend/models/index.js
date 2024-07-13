@@ -1,8 +1,4 @@
-const dbConfig = process.env.DB_CONFIG_PATH 
-  ? require(process.env.DB_CONFIG_PATH)
-  : require('../config/db.config.js');
-
-// Rest of your Sequelize setup using dbConfig
+const dbConfig = require('../config/db.config.js');
 
 const Sequelize = require('sequelize');
 const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
