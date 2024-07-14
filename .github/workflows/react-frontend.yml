@@ -22,8 +22,10 @@ jobs:
 
     - name: Install dependencies
       working-directory: ./react-frontend/aquatrustchain
-      run: npm install
-
+      run: |
+        npm install
+        npm install --save-dev identity-obj-proxy
+                
     - name: Run unit tests
       working-directory: ./react-frontend/aquatrustchain
       run: npm test -- --watchAll=false
