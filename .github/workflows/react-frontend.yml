@@ -25,6 +25,8 @@ jobs:
       run: |
         npm install
         npm install --save-dev identity-obj-proxy
+        npm install --save-dev @testing-library/react@^13.0.0
+        
                 
     - name: Run unit tests
       working-directory: ./react-frontend/aquatrustchain
