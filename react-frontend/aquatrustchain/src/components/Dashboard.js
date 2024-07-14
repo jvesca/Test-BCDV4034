@@ -11,7 +11,7 @@ function Dashboard() {
     const [receipt, setReceiptDetails] = useState({ donationId: null, donor: null, recipient: null, amount: null, donationDate: null });
     const [showReceipt, setShowReceipt] = useState(false);
     const [display, setDisplay] = useState({ display: 'none' }); // validation div alerts
-    const [blockNumber, setBlockNumber] = useState(true);
+    // const [blockNumber, setBlockNumber] = useState(true);
     const [sequenceNumber, setSequenceNumber] = useState(1); // Starting sequence number
     const [isLoading, setIsLoading] = useState(false);
     const [suggestedRecipients, setSuggestedRecipients] = useState([]);
