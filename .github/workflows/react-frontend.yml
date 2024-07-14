@@ -26,6 +26,7 @@ jobs:
         npm install
         npm install --save-dev identity-obj-proxy
         npm install --save-dev @testing-library/react@latest
+        npm install --save-dev @testing-library/dom@latest
         npm install --save-dev react-scripts@latest
 
     - name: Run unit tests
