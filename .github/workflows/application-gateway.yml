@@ -8,53 +8,61 @@ on:
     branches: [main]
 
 jobs:
+  # Checks out the repository code for the workflow to run
   setup-and-test-gateway:
     runs-on: ubuntu-latest
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
+      # Uses the actions/checkout action to check out the repository code
       - uses: actions/checkout@v2
 
+      # Sets up Node.js version 14 for the workflow
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
           node-version: '14'
 
+      # Downloads and sets up Hyperledger Fabric binaries
       - name: Set up Fabric
         run: |
           curl -sSL https://bit.ly/2ysbOFE | bash -s -- 2.2.0 1.4.9
           echo "${{ github.workspace }}/fabric-samples/bin" >> $GITHUB_PATH
           echo "FABRIC_CFG_PATH=${{ github.workspace }}/fabric-samples/config" >> $GITHUB_ENV
 
+      # Starts the Fabric test network and creates a channel
       - name: Start Fabric test network
         working-directory: ./fabric-samples/test-network
         run: |
           ./network.sh up createChannel -ca -c mychannel -s couchdb
 
+      # Adds Org3 to the existing Fabric test network
       - name: Add Org3 to network
         working-directory: ./fabric-samples/test-network/addOrg3
         run: ./addOrg3.sh up
 
+      # Deploys chaincode onto the Fabric test network
       - name: Deploy chaincode
         working-directory: ./fabric-samples/test-network
         run: |
           ./network.sh deployCC -ccn water_donation -ccv 1.0 -ccp ../../chaincode -ccl javascript -cccg ../../chaincode/collections_config.json -ccep "OR('Org1MSP.member','Org2MSP.member','Org3MSP.member')"
 
+      # Installs Node.js dependencies for the application gateway
       - name: Install dependencies
         working-directory: ./application-gateway
         run: npm install
 
+      # Runs addToWallet.js to set up identities for interacting with the Fabric network
       - name: Run addToWallet.js
         working-directory: ./application-gateway
         run: |
           echo "Current Directory: $(pwd)"
           node addToWallet.js
 
+      # Tests the application gateway functionality
       - name: Test the gateway
         working-directory: ./application-gateway
         run: |
-          echo "Current Directory: $(pwd)"          
+          echo "Current Directory: $(pwd)"
           echo "Starting submitDonation.js"
           timeout 10s node submitDonation.js || true
           echo "Server stopped after 10 seconds"
-
-   

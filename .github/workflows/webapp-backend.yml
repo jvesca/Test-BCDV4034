@@ -8,10 +8,12 @@ on:
     branches: [main]
 
 jobs:
+  # Sets up and tests the web application backend
   build-and-test:
     runs-on: ubuntu-latest
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     
+    # Sets up PostgreSQL service as a Docker container for the workflow
     services:
       postgres:
         image: postgres:14
@@ -26,59 +28,67 @@ jobs:
           - 5432:5432
 
     steps:
-    - uses: actions/checkout@v2
+      # Checks out the repository code 
+      - uses: actions/checkout@v2
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: '14'
+      # Sets up Node.js version 14 
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
 
-    - name: Install dependencies
-      working-directory: ./web-application-backend
-      run: npm install
+      # Installs Node.js dependencies 
+      - name: Install dependencies
+        working-directory: ./web-application-backend
+        run: npm install
 
-    - name: Set up database
-      run: |
-        sudo apt-get install -y postgresql-client
-        PGPASSWORD=1234 psql -h localhost -U postgres -c "CREATE DATABASE aquatrust;"
-        PGPASSWORD=1234 psql -h localhost -U postgres -c "CREATE USER jv WITH ENCRYPTED PASSWORD '1234';"
-        PGPASSWORD=1234 psql -h localhost -U postgres -c "GRANT ALL PRIVILEGES ON DATABASE aquatrust TO jv;"
+      # Sets up PostgreSQL database and User and Granting Privilege to the User
+      - name: Set up database
+        run: |
+          sudo apt-get install -y postgresql-client
+          PGPASSWORD=1234 psql -h localhost -U postgres -c "CREATE DATABASE aquatrust;"
+          PGPASSWORD=1234 psql -h localhost -U postgres -c "CREATE USER jv WITH ENCRYPTED PASSWORD '1234';"
+          PGPASSWORD=1234 psql -h localhost -U postgres -c "GRANT ALL PRIVILEGES ON DATABASE aquatrust TO jv;"
 
-    - name: Run unit tests
-      working-directory: ./web-application-backend
-      run: npm test
+      # Runs unit tests 
+      - name: Run unit tests
+        working-directory: ./web-application-backend
+        run: npm test
 
-    - name: Start backend server
-      working-directory: ./web-application-backend
-      run: |
-        node app.js &
-        echo $! > ./pid.file
-        sleep 10
+      # Starts the backend server 
+      - name: Start backend server
+        working-directory: ./web-application-backend
+        run: |
+          node app.js &
+          echo $! > ./pid.file
+          sleep 10
 
-    - name: Test POST donor registration
-      run: |
-        response=$(curl -s -o response.txt -w "%{http_code}" \
-              --location 'http://localhost:3001/registration/donors/register' \
-              --header 'Content-Type: application/json' \
-              --data '{
-                "company_name": "aquatrust",
-                "donor_type": "SUPPLIER",
-                "donation_allocation": "3"
-              }')
-        if [ $response = "201" ] || [ $response = "200" ]; then
-          echo "POST donor registration successful"
-          cat response.txt
-        else
-          echo "POST donor registration failed with status $response"
-          cat response.txt
-          exit 1
-        fi
+      # Tests the POST donor registration functionality
+      - name: Test POST donor registration
+        run: |
+          response=$(curl -s -o response.txt -w "%{http_code}" \
+                --location 'http://localhost:3001/registration/donors/register' \
+                --header 'Content-Type: application/json' \
+                --data '{
+                  "company_name": "aquatrust",
+                  "donor_type": "SUPPLIER",
+                  "donation_allocation": "3"
+                }')
+          if [ $response = "201" ] || [ $response = "200" ]; then
+            echo "POST donor registration successful"
+            cat response.txt
+          else
+            echo "POST donor registration failed with status $response"
+            cat response.txt
+            exit 1
+          fi
 
-    - name: Stop backend server
-      if: always()
-      run: |
-        if [ -f ./web-application-backend/pid.file ]; then
-          kill $(cat ./web-application-backend/pid.file)
-        else
-          echo "PID file not found, server may not have started"
-        fi
+      # Stops the backend server after completing POST donor registration
+      - name: Stop backend server
+        if: always()
+        run: |
+          if [ -f ./web-application-backend/pid.file ]; then
+            kill $(cat ./web-application-backend/pid.file)
+          else
+            echo "PID file not found, server may not have started"
+          fi
