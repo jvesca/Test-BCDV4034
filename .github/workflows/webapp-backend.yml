@@ -65,14 +65,14 @@ jobs:
                 "donor_type": "SUPPLIER",
                 "donation_allocation": "3"
               }')
-    if [ "$response" = "201" ] || [ "$response" = "200" ]; then
-      echo "POST donor registration successful"
-      cat response.txt
-    else
-      echo "POST donor registration failed with status $response"
-      cat response.txt
-      exit 1
-    fi
+        if [ $response = "201" ] || [ $response = "200" ]; then
+          echo "POST donor registration successful"
+          cat response.txt
+        else
+          echo "POST donor registration failed with status $response"
+          cat response.txt
+          exit 1
+        fi
 
     - name: Stop backend server
       if: always()
