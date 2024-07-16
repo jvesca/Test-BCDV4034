@@ -58,21 +58,21 @@ jobs:
     - name: Test POST donor registration
       run: |
         response=$(curl -s -o response.txt -w "%{http_code}" \
-          -X POST 'http://localhost:3001/registration/donors/register' \
-          -H 'Content-Type: application/json' \
-          -d '{
-            "company_name": "aquatrust",
-            "donor_type": "SUPPLIER",
-            "donation_allocation": "3"
-          }')
-        if [ $response = "201" ] || [ $response = "200" ]; then
-          echo "POST donor registration successful"
-          cat response.txt
-        else
-          echo "POST donor registration failed with status $response"
-          cat response.txt
-          exit 1
-        fi
+              --location 'http://localhost:3001/registration/donors/register' \
+              --header 'Content-Type: application/json' \
+              --data '{
+                "company_name": "aquatrust",
+                "donor_type": "SUPPLIER",
+                "donation_allocation": "3"
+              }')
+    if [ "$response" = "201" ] || [ "$response" = "200" ]; then
+      echo "POST donor registration successful"
+      cat response.txt
+    else
+      echo "POST donor registration failed with status $response"
+      cat response.txt
+      exit 1
+    fi
 
     - name: Stop backend server
       if: always()
