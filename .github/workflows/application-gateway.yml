@@ -2,7 +2,7 @@ name: Application Gateway Setup and Test
 
 on:
   workflow_run:
-    workflows: ["CI"]
+    workflows: ["Chaincode CI"]
     types:
       - completed
     branches: [main]

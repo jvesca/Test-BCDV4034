@@ -11,5 +11,5 @@ describe('WaterDonation', () => {
         expect(typeof waterDonationInstance.queryDonation).toBe('function');
     });
 
-    // Add more tests for other functions as needed
+    
 });

@@ -1,4 +1,4 @@
-name:  CI
+name:  Chaincode CI
 
 on:
   push:
@@ -14,41 +14,50 @@ jobs:
   verify-chaincode:
     runs-on: ubuntu-latest
     steps:
+    # Check out the code from the repository
     - uses: actions/checkout@v2
 
+    # Set up Node.js environment with version 14
     - name: Set up Node.js
       uses: actions/setup-node@v2
       with:
         node-version: '14'
 
+    # Install chaincode dependencies using npm
     - name: Install dependencies
       working-directory: ./chaincode
       run: npm install
 
+    # Verify Node.js setup by running a simple Node.js command
     - name: Verify Node.js setup
       working-directory: ./chaincode
       run: node -e "console.log('Chaincode setup verified')"
 
+    # Check for syntax errors in the waterDonation.js and lint JSON files
     - name: Check for syntax errors
       working-directory: ./chaincode
       run: | 
         node --check lib/waterDonation.js
         npm run lint:json
 
+    # Run unit tests for the chaincode which checks for function name CreateDonation and QueryDonation 
     - name: Run unit tests
       working-directory: ./chaincode
       run: npm test
 
+    # Run ES Lint to ensure code quality
     - name: Run linter
       working-directory: ./chaincode
       run: npm run lint
     
+    # Setting up Hyperledger Fabric Environment    
     - name: Set up Fabric
       run: |
         curl -sSL https://bit.ly/2ysbOFE | bash -s -- 2.2.0 1.4.9
         export PATH=$PATH:$PWD/fabric-samples/bin
         export FABRIC_CFG_PATH=$PWD/fabric-samples/config
-
+    
+    # Basic integration test for chaincode
     - name: Run basic integration test
       working-directory: ./chaincode
       run: |
