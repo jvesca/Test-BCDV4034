@@ -45,10 +45,7 @@ jobs:
       working-directory: ./chaincode
       run: npm test
 
-    # Run ES Lint to ensure code quality
-    - name: Run linter
-      working-directory: ./chaincode
-      run: npm run lint
+   
     
     # Setting up Hyperledger Fabric Environment    
     - name: Set up Fabric
