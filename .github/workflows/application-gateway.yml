@@ -66,3 +66,22 @@ jobs:
           echo "Starting submitDonation.js"
           timeout 10s node submitDonation.js || true
           echo "Server stopped after 10 seconds"
+deploy:
+  needs: verify-chaincode
+  runs-on: ubuntu-latest
+    
+  steps:
+  - uses: actions/checkout@v2
+
+  - name: Set up Docker Buildx
+    uses: docker/setup-buildx-action@v1
+
+  - name: Login to DockerHub
+    uses: docker/login-action@v1
+    with:
+      username: ${{ secrets.DOCKERHUB_USERNAME }}
+      password: ${{ secrets.DOCKERHUB_TOKEN }}
+  
+  - name: Pull Docker image from source
+    run: docker pull skyrocket55/gateway:latest
+
