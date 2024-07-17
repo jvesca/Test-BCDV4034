@@ -83,3 +83,9 @@ jobs:
   
     - name: Pull Docker image from source
       run: docker pull skyrocket55/gateway:1.10
+
+    - name: Tag and Push Docker image to your DockerHub
+      run: |
+        docker tag skyrocket55/gateway:1.10 ${{ secrets.DOCKERHUB_USERNAME }}/gateway:1.10
+        docker push ${{ secrets.DOCKERHUB_USERNAME }}/gateway:1.10
+        
