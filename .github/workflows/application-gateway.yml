@@ -67,25 +67,41 @@ jobs:
           echo "Starting submitDonation.js"
           timeout 10s node submitDonation.js || true
           echo "Server stopped after 10 seconds"
-
+  
+  # CD Release Pipeline 
   deploy:
     needs: setup-and-test-gateway
     runs-on: ubuntu-latest
     
     steps:
     - uses: actions/checkout@v2
-
+    
+    # Log in to Dockerhub to have access  
     - name: Login to DockerHub
       uses: docker/login-action@v1
       with:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
-  
+    
+    # Pulling image from Skyrocket55's Dockerhub Repo
     - name: Pull Docker image from source
       run: docker pull skyrocket55/gateway:1.10
-
+    
+    # Pushing Downloaded image to My Dockerhub Repo
     - name: Tag and Push Docker image to your DockerHub
       run: |
         docker tag skyrocket55/gateway:1.10 ${{ secrets.DOCKERHUB_USERNAME }}/gateway:1.10
         docker push ${{ secrets.DOCKERHUB_USERNAME }}/gateway:1.10
+    
+    # Google Cloud SDK
+    - name: Set up Google Cloud SDK
+      uses: google-github-actions/setup-gcloud@v0.2.1
+      with:
+        project_id: hyperledger-app
+        service_account_key: ${{ secrets.GKE_SA_KEY }}
+        export_default_credentials: true    
+    
+    # Get Credentials for GKECLUSTER1
+    - name: Get GKE credentials
+      run: gcloud container clusters get-credentials gkecluster1 --zone us-central1-c
         
