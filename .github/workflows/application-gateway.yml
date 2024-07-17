@@ -113,8 +113,10 @@ jobs:
 
     - name: Deploy to GKE
       run: |
+        kubectl apply -f k8s/ingress/ingress.yml
+        kubectl apply -f k8s/storage/k8s-storage-class.yml
         kubectl apply -f k8s/app/gateway/k8s-gateway.yml
-        kubectl rollout status deployment/gateway
+    
 
     - name: Verify deployment
       run: |
