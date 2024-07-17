@@ -31,7 +31,7 @@ jobs:
     - name: Log in to DockerHub
       run: |
         echo "${{ secrets.DOCKERHUB_TOKEN_PASSPHRASE }}" | gpg --batch --passphrase-fd 0 \
-        -d dockerhub_token.txt.gpg | docker login --username your_dockerhub_username --password-stdin
+        -d dockerhub_token.txt.gpg | docker login --username jvescalante --password-stdin
 
     # Install chaincode dependencies using npm
     - name: Install dependencies
