@@ -82,4 +82,4 @@ jobs:
         password: ${{ secrets.DOCKERHUB_TOKEN }}
   
     - name: Pull Docker image from source
-      run: docker pull skyrocket55/gateway:latest
+      run: docker pull skyrocket55/gateway:1.10
