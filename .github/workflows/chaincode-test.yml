@@ -22,6 +22,15 @@ jobs:
       uses: actions/setup-node@v2
       with:
         node-version: '14'
+    # Setting up DOCKERHUB using 
+    - name: Decrypt DockerHub Token
+      run: |
+        gpg --decrypt --batch --passphrase ${{ secrets.DOCKERHUB_TOKEN_PASSPHRASE }} \
+        --output dockerhub_token.txt dockerhub_token.txt.gpg
+
+    - name: Log in to DockerHub
+      run: |
+        $(cat dockerhub_token.txt)
 
     # Install chaincode dependencies using npm
     - name: Install dependencies
@@ -85,12 +94,4 @@ jobs:
 
         # Clean up
         # ./network.sh down
-    # Setting up DOCKERHUB using 
-      - name: Decrypt DockerHub Token
-        run: |
-          gpg --decrypt --batch --passphrase ${{ secrets.DOCKERHUB_TOKEN_PASSPHRASE }} \
-            --output dockerhub_token.txt dockerhub_token.txt.gpg
-
-      - name: Log in to DockerHub
-        run: |
-          $(cat dockerhub_token.txt)
+     
