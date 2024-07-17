@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gateway
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: gateway
+  template:
+    metadata:
+      labels:
+        name: gateway
+    spec:
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: gateway-pvc
+      containers:
+        - name: gateway
+          resources:
+            requests:
+              memory: "200Mi"
+              cpu: "100m"
+            limits:
+              memory: "300Mi"
+              cpu: "200m"  
+          image: skyrocket55/gateway:1.9
+          # Uncomment the following during development/testing of the image
+          # imagePullPolicy: Always
+          volumeMounts:
+            - name: data
+              mountPath: /usr/src/gateway/wallet
+              subPath: wallet
+---
+# Expose the port 7051 as ClusterIP
+apiVersion: v1
+kind: Service
+metadata:
+  name: gateway
+  labels:
+    app: gateway
+spec:
+  type: ClusterIP
+  selector:
+    name: gateway
+  ports:
+    - port: 4000
+      protocol: TCP
+      targetPort: 4000

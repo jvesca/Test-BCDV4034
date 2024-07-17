@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+spec:
+  selector:
+    matchLabels:
+      name: frontend
+  template:
+    metadata:
+      labels:
+        name: frontend
+    spec:
+      containers:
+        - name: frontend
+          resources:
+            requests:
+              memory: "200Mi"
+              cpu: "100m"
+            limits:
+              memory: "300Mi"
+              cpu: "200m"  
+          image: skyrocket55/frontend:1.6
+          ports:
+          - containerPort: 80
+      hostAliases:
+        - ip: "35.239.70.220"
+          hostnames:
+            - "api.aquatrust-chain.com"
+            - "gateway.aquatrust-chain.com"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: frontend
+  name: frontend
+spec:
+  type: ClusterIP
+  ports:
+    - name: "frontend"
+      port: 80
+      protocol: TCP
+      targetPort: 80
+  selector:
+    name: frontend

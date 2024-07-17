@@ -1,0 +1,73 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: gcs-fuse-csi-pv-test
+spec:
+  accessModes:
+  - ReadWriteMany
+  capacity:
+    storage: 5Gi
+  storageClassName: example-storage-class
+  claimRef:
+    namespace: default
+    name: gcs-fuse-csi-static-pvc-test 
+  csi:
+    driver: gcsfuse.csi.storage.gke.io
+    volumeHandle: k8s-fabric
+    readOnly: true
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: gcs-fuse-csi-static-pvc-test
+  namespace: default
+spec:
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 5Gi
+  volumeName: gcs-fuse-csi-pv-test
+  storageClassName: example-storage-class
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: gcs-fuse-csi-example-static-pvc-test2
+  annotations:
+    gke-gcsfuse/volumes: "true"
+spec:
+  containers:
+  - image: busybox
+    name: busybox
+    command: ["sleep"]
+    args: ["infinity"]
+    volumeMounts:
+    - name: gcs-fuse-csi-static
+      mountPath: /data
+  serviceAccountName: gkeaccess
+  volumes:
+  - name: gcs-fuse-csi-static
+    persistentVolumeClaim:
+      claimName: gcs-fuse-csi-static-pvc-test
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: gcs-fuse-csi-example-static-pvc
+  annotations:
+    gke-gcsfuse/volumes: "true"
+spec:
+  containers:
+  - image: busybox
+    name: busybox
+    command: ["sleep"]
+    args: ["infinity"]
+    volumeMounts:
+    - name: gcs-fuse-csi-static
+      mountPath: /data
+  serviceAccountName: gkeaccess
+  volumes:
+  - name: gcs-fuse-csi-static
+    persistentVolumeClaim:
+      claimName: gcs-fuse-csi-static-pvc-test

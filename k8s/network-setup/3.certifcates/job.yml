@@ -1,0 +1,53 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: create-certs
+spec:
+  parallelism: 1
+  completions: 1
+  template:
+    metadata:
+      name: create-certs
+      annotations:
+        gke-gcsfuse/volumes: "true"
+    spec:
+      serviceAccountName: gkeaccess
+      volumes:
+        - name: fabricfiles
+          persistentVolumeClaim:
+            claimName: gcs-fuse-csi-static-pvc-test
+      containers:
+        - name: create-certs
+          image: hyperledger/fabric-ca-tools:latest
+          resources:
+            requests:
+              memory: "200Mi"
+              cpu: "50m"
+          volumeMounts:
+            - mountPath: /organizations
+              name: fabricfiles
+              subPath: organizations
+            - mountPath: /scripts
+              name: fabricfiles
+              subPath: scripts
+          command:
+            - /bin/sh
+            - -c
+            - |
+              mkdir /tmp/scripts &&
+              cp /scripts/* /tmp/scripts/ &&
+              echo "Listing /tmp/scripts before chmod" &&
+              ls -l /tmp/scripts &&
+              echo "Changing permissions of individual files in /tmp/scripts" &&
+              chmod a+rwx /tmp/scripts/orderer-certs.sh &&
+              chmod a+rwx /tmp/scripts/org1-certs.sh &&
+              chmod a+rwx /tmp/scripts/org2-certs.sh &&
+              chmod a+rwx /tmp/scripts/org3-certs.sh &&
+              echo "Listing /tmp/scripts after chmod" &&
+              ls -l /tmp/scripts &&
+              /tmp/scripts/orderer-certs.sh &&
+              /tmp/scripts/org1-certs.sh &&
+              /tmp/scripts/org2-certs.sh &&
+              /tmp/scripts/org3-certs.sh ||
+              sleep 3600
+      restartPolicy: Never

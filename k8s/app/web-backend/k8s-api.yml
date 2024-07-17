@@ -1,0 +1,74 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: api
+spec:
+  replicas: 1
+  serviceName: "api"
+  selector:
+    matchLabels:
+      app: api
+  template:
+    metadata:
+      labels:
+        app: api
+    spec:
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: mypvc
+      containers:
+        - name: api
+          stdin: true
+          tty: true
+          resources:
+            requests:
+              memory: "200Mi"
+              cpu: "100m"
+            limits:
+              memory: "300Mi"
+              cpu: "200m"
+          image: skyrocket55/backend-api:1.1
+          env:
+            - name: HOST
+              value: postgres
+            - name: USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: username
+            - name: PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: password
+            - name: DB_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: database
+          ports:
+            - containerPort: 3008
+              name: http
+  volumeClaimTemplates:
+    - metadata:
+        name: mypvc
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 1Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: api
+  name: api
+spec:
+  selector:
+    app: api
+  ports:
+    - name: http
+      port: 3008
+      targetPort: 3008
