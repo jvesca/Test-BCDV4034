@@ -90,8 +90,8 @@ jobs:
     # Pushing Downloaded image to My Dockerhub Repo Change to latest instead of version 1.10
     - name: Tag and Push Docker image to your DockerHub
       run: |
-        docker tag skyrocket55/gateway:1.10 ${{ secrets.DOCKERHUB_USERNAME }}/gateway:latest
-        docker push ${{ secrets.DOCKERHUB_USERNAME }}/gateway:latest
+        docker tag skyrocket55/gateway:1.10 ${{ secrets.DOCKERHUB_USERNAME }}/gateway:1.10
+        docker push ${{ secrets.DOCKERHUB_USERNAME }}/gateway:1.10
     
     # Google Cloud SDK
     - name: Set up Google Cloud SDK
@@ -110,4 +110,14 @@ jobs:
     # Get Credentials for GKECLUSTER1
     - name: Get GKE credentials
       run: gcloud container clusters get-credentials gkecluster-1 --zone us-central1-c
+
+   - name: Deploy to GKE
+      run: |
+        kubectl apply -f k8s/app/gateway/k8s-gateway.yml
+        kubectl rollout status deployment/api-gateway-deployment
+
+    - name: Verify deployment
+      run: |
+        kubectl get pods -l app=api-gateway
+        kubectl get services -l app=api-gateway
         

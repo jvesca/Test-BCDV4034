@@ -25,9 +25,9 @@ spec:
             limits:
               memory: "300Mi"
               cpu: "200m"  
-          image: skyrocket55/gateway:1.9
+          image: jvescalante/gateway:1.10
           # Uncomment the following during development/testing of the image
-          # imagePullPolicy: Always
+          imagePullPolicy: Always
           volumeMounts:
             - name: data
               mountPath: /usr/src/gateway/wallet
