@@ -101,6 +101,12 @@ jobs:
         service_account_key: ${{ secrets.GKE_SA_KEY }}
         export_default_credentials: true    
     
+    # GKE Auth plugin for Kubectl commands
+    - name: Install GKE Auth Plugin
+      run: |
+        gcloud components install gke-gcloud-auth-plugin
+        echo "export USE_GKE_GCLOUD_AUTH_PLUGIN=True" >> $GITHUB_ENV
+    
     # Get Credentials for GKECLUSTER1
     - name: Get GKE credentials
       run: gcloud container clusters get-credentials gkecluster-1 --zone us-central1-c
