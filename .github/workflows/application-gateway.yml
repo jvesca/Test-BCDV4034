@@ -114,10 +114,9 @@ jobs:
     - name: Deploy to GKE
       run: |
         kubectl apply -f k8s/app/gateway/k8s-gateway.yml
-        kubectl rollout status deployment/api-gateway-deployment
+        kubectl rollout status deployment/gateway
 
     - name: Verify deployment
       run: |
-        kubectl get pods -l app=api-gateway
-        kubectl get services -l app=api-gateway
-        
+        kubectl get pods -l app=gateway
+        kubectl get services -l app=gateway        
