@@ -67,7 +67,7 @@ jobs:
           timeout 10s node submitDonation.js || true
           echo "Server stopped after 10 seconds"
 deploy:
-  needs: verify-chaincode
+  needs: setup-and-test-gateway
   runs-on: ubuntu-latest
     
   steps:
