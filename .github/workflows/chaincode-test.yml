@@ -30,7 +30,10 @@ jobs:
 
     - name: Log in to DockerHub
       run: |
-        docker login --username jvescalante --password-stdin < dockerhub_token.txt
+        # Extract DockerHub credentials from dockerhub_token.txt
+        DOCKER_LOGIN=$(head -n 1 dockerhub_token.txt)
+        DOCKER_TOKEN=$(tail -n 1 dockerhub_token.txt)
+        echo "${DOCKER_TOKEN}" | docker login --username "${DOCKER_LOGIN#-u }" --password-stdin
 
     # Install chaincode dependencies using npm
     - name: Install dependencies
