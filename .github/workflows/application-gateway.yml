@@ -87,11 +87,11 @@ jobs:
     - name: Pull Docker image from source
       run: docker pull skyrocket55/gateway:1.10
     
-    # Pushing Downloaded image to My Dockerhub Repo
+    # Pushing Downloaded image to My Dockerhub Repo Change to latest instead of version 1.10
     - name: Tag and Push Docker image to your DockerHub
       run: |
-        docker tag skyrocket55/gateway:1.10 ${{ secrets.DOCKERHUB_USERNAME }}/gateway:1.10
-        docker push ${{ secrets.DOCKERHUB_USERNAME }}/gateway:1.10
+        docker tag skyrocket55/gateway:1.10 ${{ secrets.DOCKERHUB_USERNAME }}/gateway:latest
+        docker push ${{ secrets.DOCKERHUB_USERNAME }}/gateway:latest
     
     # Google Cloud SDK
     - name: Set up Google Cloud SDK
