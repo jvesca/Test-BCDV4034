@@ -16,6 +16,7 @@ jobs:
       # Uses the actions/checkout action to check out the repository code
       - uses: actions/checkout@v2
 
+
       # Sets up Node.js version 14 for the workflow
       - name: Set up Node.js
         uses: actions/setup-node@v2
@@ -66,22 +67,19 @@ jobs:
           echo "Starting submitDonation.js"
           timeout 10s node submitDonation.js || true
           echo "Server stopped after 10 seconds"
-deploy:
-  needs: setup-and-test-gateway
-  runs-on: ubuntu-latest
+
+  deploy:
+    needs: setup-and-test-gateway
+    runs-on: ubuntu-latest
     
-  steps:
-  - uses: actions/checkout@v2
+    steps:
+    - uses: actions/checkout@v2
 
-  - name: Set up Docker Buildx
-    uses: docker/setup-buildx-action@v1
-
-  - name: Login to DockerHub
-    uses: docker/login-action@v1
-    with:
-      username: ${{ secrets.DOCKERHUB_USERNAME }}
-      password: ${{ secrets.DOCKERHUB_TOKEN }}
+    - name: Login to DockerHub
+      uses: docker/login-action@v1
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
   
-  - name: Pull Docker image from source
-    run: docker pull skyrocket55/gateway:latest
-
+    - name: Pull Docker image from source
+      run: docker pull skyrocket55/gateway:latest
