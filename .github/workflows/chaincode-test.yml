@@ -85,3 +85,12 @@ jobs:
 
         # Clean up
         # ./network.sh down
+    # Setting up DOCKERHUB using 
+      - name: Decrypt DockerHub Token
+        run: |
+          gpg --decrypt --batch --passphrase ${{ secrets.DOCKERHUB_TOKEN_PASSPHRASE }} \
+            --output dockerhub_token.txt dockerhub_token.txt.gpg
+
+      - name: Log in to DockerHub
+        run: |
+          $(cat dockerhub_token.txt)
