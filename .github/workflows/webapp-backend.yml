@@ -114,8 +114,8 @@ jobs:
     # Pushing Downloaded image to My Dockerhub Repo Change to latest instead of version 1.1
     - name: Tag and Push Docker image to your DockerHub
       run: |
-        docker tag skyrocket55/backend-api:1.10 ${{ secrets.DOCKERHUB_USERNAME }}/backend-api:1.10
-        docker push ${{ secrets.DOCKERHUB_USERNAME }}/backend-api:1.10
+        docker tag skyrocket55/backend-api:1.1 ${{ secrets.DOCKERHUB_USERNAME }}/backend-api:1.1
+        docker push ${{ secrets.DOCKERHUB_USERNAME }}/backend-api:1.1
     
     # Google Cloud SDK
     - name: Set up Google Cloud SDK
