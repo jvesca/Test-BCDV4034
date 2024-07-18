@@ -1,28 +1,14 @@
-# Use a Node.js base image with a specific version
 FROM node:14
 
-# Set working directory inside the container
-WORKDIR /app
+WORKDIR /usr/src/gateway
 
-# Copy package.json and package-lock.json to the working directory
-COPY package*.json ./
-
-# Install application dependencies
-RUN npm install
-
-# Copy application source code to the working directory
+# Copy the entire current directory to the WORKDIR in the container
 COPY . .
 
-# Run addToWallet.js to create identities
-RUN node addToWallet.js
+RUN  npm install
 
-# Run submitDonation.js to perform initial setup action
-RUN node submitDonation.js
+EXPOSE 4000
 
-# Expose port 3000 to the outside world
-EXPOSE 3000
-
-# Command to run the application gateway
-CMD ["node", "app.js"]
-
-
+# Run addToWallet.js followed by submitDonation.js
+CMD ["node", "addToWallet.js"] 
+ENTRYPOINT ["node","submitDonation.js"]

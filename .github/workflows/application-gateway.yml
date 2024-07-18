@@ -47,7 +47,7 @@ jobs:
         run: |
           ./network.sh deployCC -ccn water_donation -ccv 1.0 -ccp ../../chaincode -ccl javascript -cccg ../../chaincode/collections_config.json -ccep "OR('Org1MSP.member','Org2MSP.member','Org3MSP.member')"
 
-      # Installs Node.js dependencies for the application gateway
+      # Installs dependencies for the application gateway
       - name: Install dependencies
         working-directory: ./application-gateway
         run: npm install
@@ -83,11 +83,11 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
     
-    # Pulling image from Skyrocket55's Dockerhub Repo
+    # Pulling Gateway image from Skyrocket55's Dockerhub Repo
     - name: Pull Docker image from source
       run: docker pull skyrocket55/gateway:1.10
     
-    # Pushing Downloaded image to My Dockerhub Repo Change to latest instead of version 1.10
+    # Pushing Downloaded image to My Dockerhub Repo Change 
     - name: Tag and Push Docker image to your DockerHub
       run: |
         docker tag skyrocket55/gateway:1.10 ${{ secrets.DOCKERHUB_USERNAME }}/gateway:1.10
