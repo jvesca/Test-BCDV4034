@@ -40,3 +40,59 @@ jobs:
       - name: Build production bundle
         working-directory: ./react-frontend/aquatrustchain
         run: npm run build
+
+# CD Release Pipeline for WEB APP BACKEND
+  deploy:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v2
+    
+    # Log in to Dockerhub to have access  
+    - name: Login to DockerHub
+      uses: docker/login-action@v1
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+    
+    # Pulling Frontend image from Skyrocket55's Dockerhub Repo
+    - name: Pull Docker image from source
+      run: docker pull skyrocket55/frontend:1.6
+    
+    # Pushing Downloaded image to My Dockerhub Repo 
+    - name: Tag and Push Docker image to your DockerHub
+      run: |
+        docker tag skyrocket55/frontend:1.6 ${{ secrets.DOCKERHUB_USERNAME }}/frontend:1.6
+        docker push ${{ secrets.DOCKERHUB_USERNAME }}/frontend:1.6
+    
+    # Google Cloud SDK which allows the service account to interact with GKE
+    - name: Set up Google Cloud SDK
+      uses: google-github-actions/setup-gcloud@v0.2.1
+      with:
+        project_id: hyperledger-app
+        service_account_key: ${{ secrets.GKE_SA_KEY }}
+        export_default_credentials: true    
+    
+    # GKE Auth plugin for Kubectl commands
+    - name: Install GKE Auth Plugin
+      run: |
+        gcloud components install gke-gcloud-auth-plugin
+        echo "export USE_GKE_GCLOUD_AUTH_PLUGIN=True" >> $GITHUB_ENV
+    
+    # Get Credentials for GKECLUSTER1
+    - name: Get GKE credentials
+      run: gcloud container clusters get-credentials gkecluster-1 --zone us-central1-c
+    
+    # Deploy Frontend to GKE
+    - name: Deploy to GKE
+      run: |
+        kubectl apply -f k8s/ingress/ingress.yml
+        kubectl apply -f k8s/storage/k8s-storage-class.yml
+        kubectl apply -f k8s/app/frontend/k8s-frontend.yml
+    
+
+    - name: Verify deployment
+      run: |
+        kubectl get pods -l app=frontend
+        kubectl get services -l app=frontend 

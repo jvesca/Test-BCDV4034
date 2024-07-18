@@ -20,7 +20,7 @@ spec:
             limits:
               memory: "300Mi"
               cpu: "200m"  
-          image: skyrocket55/frontend:1.6
+          image: jvescalante/frontend:1.6
           ports:
           - containerPort: 80
       hostAliases:
