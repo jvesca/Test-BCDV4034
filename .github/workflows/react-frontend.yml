@@ -1,8 +1,8 @@
-name: React Frontend CI
+name: React Frontend CI/CD
 
 on:
   workflow_run:
-    workflows: ["Web Application Backend CI"]
+    workflows: ["Web Application Backend CI/CD"]
     types:
       - completed
     branches: [main]

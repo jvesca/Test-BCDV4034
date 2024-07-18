@@ -1,8 +1,8 @@
-name: Web Application Backend CI
+name: Web Application Backend CI/CD
 
 on:
   workflow_run:
-    workflows: ["Application Gateway Setup and Test"]
+    workflows: ["Application Gateway CI/CD"]
     types:
       - completed
     branches: [main]
