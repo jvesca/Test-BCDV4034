@@ -28,7 +28,7 @@ spec:
             limits:
               memory: "300Mi"
               cpu: "200m"
-          image: skyrocket55/backend-api:1.1
+          image: jvescalante/backend-api:1.1
           env:
             - name: HOST
               value: postgres
