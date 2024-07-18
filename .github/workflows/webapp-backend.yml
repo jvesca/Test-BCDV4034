@@ -134,15 +134,19 @@ jobs:
     # Get Credentials for GKECLUSTER1
     - name: Get GKE credentials
       run: gcloud container clusters get-credentials gkecluster-1 --zone us-central1-c
-
+    
+    # Deploy Postgres and API to GKE
     - name: Deploy to GKE
       run: |
         kubectl apply -f k8s/ingress/ingress.yml
         kubectl apply -f k8s/storage/k8s-storage-class.yml
-        kubectl apply -f . k8s/app/web-backend
+        kubectl apply -f k8s/app/web-backend/k8s-api.yml
+        kubectl apply -f k8s/app/web-backend/k8s-postgres-secrets.yml
+        kubectl apply -f k8s/app/web-backend/k8s-postgres.yml
     
 
     - name: Verify deployment
       run: |
         kubectl get pods -l app=postgres
-        kubectl get services -l app=postgres        
+        kubectl get services -l app=postgres 
+
